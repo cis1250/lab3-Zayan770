@@ -9,29 +9,37 @@
 
 import re
 
-#This is a function that checks if a text qualifies as a sentence. You do not need to modify this!
 def is_sentence(text):
-    # Check if the text is not empty and is a string
     if not isinstance(text, str) or not text.strip():
         return False
-
-    # Check for starting with a capital letter
     if not text[0].isupper():
         return False
-
-    # Check for ending punctuation
     if not re.search(r'[.!?]$', text):
         return False
-
-    # Check if it contains at least one word (non-whitespace characters)
     if not re.search(r'\w+', text):
         return False
-
     return True
 
+# Prompt user for a valid sentence
 user_sentence = input("Enter a sentence: ")
+while not is_sentence(user_sentence): 
+    print("Invalid sentence. Please try again.")
+    user_sentence = input("Enter a sentence: ")
 
-while (is_sentence(user_sentence) == False):
-    print("This does not meet the criteria for a sentence.")
-    user_input = input("Enter a sentence: ")
-    
+# Clean and split the sentence
+sentence_clean = user_sentence.replace('.', '').replace(',', '').replace('!', '').replace('?', '').lower()
+words = sentence_clean.split()
+
+unique_words = []
+frequencies = []
+
+for word in words:
+    if word not in unique_words:
+        unique_words.append(word)
+        frequencies.append(1)
+    else:
+        index = unique_words.index(word)
+        frequencies[index] += 1
+
+for i in range(len(unique_words)):
+    print(f"{unique_words[i]}: {frequencies[i]}")
